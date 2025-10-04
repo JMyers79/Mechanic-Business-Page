@@ -1,0 +1,33 @@
+<%- include('../partials/head.ejs') %>
+<body>
+<%- include('../partials/menu.ejs') %>
+<div class="mt-4 p-5 bg-primary text-white rounded">
+  <h1><%= title %></h1>
+</div>
+<div class="d-flex flex-wrap gap-3">
+    <% if (Array.isArray(data) && data.length > 0) { %>
+        <% data.forEach((product, i) => { %>
+            <div class="card" style="width: 18rem;">
+                <img src="/images/fox.webp" class="card-img-top" alt="product image">
+                <div class="card-body">
+                    <h5 class="card-title"><%= product.name %></h5>
+                    <p class="card-text"><strong>Brand:</strong> <%= product.brand %></p>
+                    <p class="card-text"><strong>Category:</strong> <%= product.category %></p>
+                    <p class="card-text"><strong>Price:</strong> $<%= product.price_usd %></p>
+                    <p class="card-text"><strong>In stock:</strong> <%= product.stock_qty %></p>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal-<%= i %>">Details</button>
+                    <%- include('../partials/parkingmodal.ejs', {
+                        modalId: 'myModal-' + i,
+                        modalTitle: 'Product: ' + product.name,
+                        modalBody: `<p>${product.description}</p><p><strong>Price USD:</strong> $${product.price_usd}</p>`
+                    }) %>
+                </div>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <p>No products available.</p>
+    <% } %>
+</div>
+    <%- include('../partials/footer.ejs') %>
+</body>
+</html>
