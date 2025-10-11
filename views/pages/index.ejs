@@ -1,37 +1,35 @@
 <%- include('../partials/head.ejs') %>
+<body>
 <%- include('../partials/menu.ejs') %>
 <div class="mt-4 p-5 bg-primary text-white rounded">
-    <h1><%= title %></h1>
+  <h1><%= title %></h1>
 </div>
-
-<body>
-  <h2>Contact Us today in the form below to get a free quote!</h2>
-    <div class="contact-container">
-<form>
-  <div class="form-group">
-    <label for="exampleFormControlInput1">Email address</label>
-    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlSelect1">Example select</label>
-    <select class="form-control" id="exampleFormControlSelect1">
-      <option>Diagnostics</option>
-      <option>Battery Services</option>
-      <option>Oil Change</option>
-      <option>Tires</option>
-      <option>Other</option>
-    </select>
-  </div>
-  <div class="form-group">
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">More details about request</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-  </div>
-</form>
-
+<div class="d-flex flex-wrap gap-3">
+    <% if (Array.isArray(data) && data.length > 0) { %>
+        <% data.forEach((product, i) => { %>
+            <div class="card" style="width: 18rem;">
+                <img src="images/<%= product.image || 'fox.webp' %>" class="card-img-top img-fluid" alt="product image" loading="lazy">
+                <div class="card-body">
+                    <h5 class="card-title"><%= product.name %></h5>
+                    <p class="card-text"><strong>Brand:</strong> <%= product.brand %></p>
+                    <p class="card-text"><strong>Category:</strong> <%= product.category %></p>
+                    <p class="card-text"><strong>Price:</strong> $<%= product.price_usd %></p>
+                    <p class="card-text"><strong>In stock:</strong> <%= product.stock_qty %></p>
+                </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal-<%= i %>">Details</button>
+            </div>
+        <% }) %>
+        <% data.forEach((product, i) => { %>
+            <%- include('../partials/parkingmodal.ejs', {
+                modalId: 'myModal-' + i,
+                modalTitle: 'Product: ' + product.name,
+                modalBody: `<p>${product.description}</p><p><strong>Price USD:</strong> $${product.price_usd}</p><p><strong>Stock:</strong> ${product.stock_qty}</p>`
+            }) %>
+        <% }) %>
+    <% } else { %>
+        <p>No products available.</p>
+    <% } %>
 </div>
-   <%- include('../partials/footer.ejs') %>
+    <%- include('../partials/footer.ejs') %>
 </body>
 </html>
